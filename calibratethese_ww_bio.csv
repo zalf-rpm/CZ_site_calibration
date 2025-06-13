@@ -1,0 +1,24 @@
+name;position in array;low;high;stepsize;optguess;minbound;maxbound;derived params
+
+
+Pip
+
+Phenology
+StageTemperatureSum
+BaseDaylength
+DaylenghtRequirement
+
+
+Pip & Olga
+Yield
+CropSpecificMaxRootingDepth
+SpeficLeafArea
+xxx
+yyy
+zzz
+
+
+Olga
+
+MaxAssimilationRate
+FieldConditionModifier
