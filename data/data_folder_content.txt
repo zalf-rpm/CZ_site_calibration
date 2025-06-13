@@ -1,0 +1,10 @@
+Content of this folder:
+Fertilisation_min.csv
+Meta.csv
+
+For CZ, we don't have
+Irrigation.csv
+Management.csv
+Residues.csv
+
+We will access gridded soil and weather data based on coordinates.
