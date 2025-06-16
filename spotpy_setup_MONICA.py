@@ -146,64 +146,50 @@ class SpotSetup(object):
             # VernalisationRequirement = {} # only for winter crops#
 
             #Values used for pheno calibration, turn off in not used# 
+            SpecificLeafArea = vector["SpecificLeafArea"] 
             StageKcFactor = {}
             CropSpecificMaxRootingDepth = vector["CropSpecificMaxRootingDepth"]
             RootPenetrationRate = vector["RootPenetrationRate"]
-            SpecificRootLength = vector["SpecificRootLength"]
-            DroughtStressThreshold = {}
-
-            #MaxAssimilationRate = vector["MaxAssimilationRate"]
-            #SpecificLeafArea = {}   
+            MaxAssimilationRate = vector["MaxAssimilationRate"]
             
-            
-            for i, name in enumerate(vector.name): #That is for the stage-specific values. Check which parameters will actually be included
-                if name.startswith("SpecificLeafArea_"):
-                    SpecificLeafArea[int(name.split('_')[1]) - 1] = vector[i]
+            for i, name in enumerate(vector.name): 
                 if name.startswith("StageTemperatureSum_"):
                     StageTemperatureSum[int(name.split('_')[1]) - 1] = vector[i]
-                if name.startswith("DroughtStressThreshold_"):
-                    DroughtStressThreshold[int(name.split('_')[1]) - 1] = vector[i]
-                if name.startswith("StageKcFactor_"):
-                    StageKcFactor[int(name.split('_')[1]) - 1] = vector[i]
                 if name.startswith("BaseDaylength_"):
                     BaseDaylength[int(name.split('_')[1]) - 1] = vector[i]
                 if name.startswith("DaylengthRequirement_"):
                     DaylengthRequirement[int(name.split('_')[1]) - 1] = vector[i]
                 if name.startswith("VernalisationRequirement_"):
                     VernalisationRequirement[int(name.split('_')[1]) - 1] = vector[i]
-
+                # if name.startswith("SpecificLeafArea_"):
+                #     SpecificLeafArea[int(name.split('_')[1]) - 1] = vector[i]
+                if name.startswith("StageKcFactor_"):
+                    StageKcFactor[int(name.split('_')[1]) - 1] = vector[i]
 
             # exchange the values in the environment template
-            #Turn off if needed# Check which parameters will actually be included
+            # Parameters for pheno calibration, turn off if not needed#
             # for key, value in StageTemperatureSum.items():
             #     current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["StageTemperatureSum"][0][key] = value
-
             # for key, value in BaseDaylength.items():
             #     current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["BaseDaylength"][0][key] = value
-
             # for key, value in DaylengthRequirement.items():
             #     current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["DaylengthRequirement"][0][key] = value
-            
             # for key, value in VernalisationRequirement.items():
             #     current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["VernalisationRequirement"][key] = value
 
-
-            #Turn off if needed#
+            # Parameters for bio calibration, turn off if not needed#
+            if name.startswith("SpecificLeafArea_"):
+                current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][0] *= SpecificLeafArea
+                current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][1] *= SpecificLeafArea
+                current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][2] *= SpecificLeafArea
+                current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][3] *= SpecificLeafArea
+                current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][4] *= SpecificLeafArea
+                current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][5] *= SpecificLeafArea          
             for key, value in StageKcFactor.items():
                 current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["StageKcFactor"][0][key] = value
-
             current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["CropSpecificMaxRootingDepth"] = CropSpecificMaxRootingDepth
-            
             current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["species"]["RootPenetrationRate"] = RootPenetrationRate
-
-            current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["species"]["SpecificRootLength"] = SpecificRootLength
-
-            for key, value in DroughtStressThreshold.items():
-                current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["DroughtStressThreshold"][key] = value
-            
-            #current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["MaxAssimilationRate"] = MaxAssimilationRate
-            # for key, value in SpecificLeafArea.items():
-            #     current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][0][key] = value
+            current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["MaxAssimilationRate"] = MaxAssimilationRate
 
             sim_envs.append(current_env)
 
