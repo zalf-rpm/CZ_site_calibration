@@ -99,11 +99,11 @@ class SpotSetup(object):
                     if self.config.get(param):
                         value = row[column] if pd.notna(row[column]) else np.nan
 
-                        # if param in ["Stem_elongation","Maturity"]: #here it is in doy already#
-                        #     if pd.notna(value):
-                        #         value = datetime.strptime(value, '%d.%m.%Y').timetuple().tm_yday
-                        #     else:
-                        #         value = np.nan
+                        if param in ["Stem_elongation","Maturity"]: #both, the simulations and the measurements need to be in doy#
+                            if pd.notna(value):
+                                value = datetime.strptime(value, '%d.%m.%Y').timetuple().tm_yday
+                            else:
+                                value = np.nan
 
                         self.observations.append((row['Experiment'], value))
 
