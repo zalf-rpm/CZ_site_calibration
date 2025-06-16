@@ -29,7 +29,7 @@
 			"csv-separator": ","
 		},
 		"calibration_events": [
-			{"at": ["Stage", "=", 2]}, [
+			{"at": ["Stage", "=", 3]}, [
 				"Date"
 			],
 			"maturity", [

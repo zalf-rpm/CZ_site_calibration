@@ -1,5 +1,5 @@
 set PATH_TO_MONICA_BIN_DIR=C:\MONICA\monica_win64_3.6.32.toth_ser_TUA\bin
-set MONICA_PARAMETERS=C:\Users\palka\GitHub\irrigation_multiexp\data\monica-parameters
+set MONICA_PARAMETERS=C:\Users\palka\GitHub\cz_site_calibration\data\monica-parameters
 
 START "ZMQ_IN_PROXY" /MIN %PATH_TO_MONICA_BIN_DIR%\monica-zmq-proxy -pps -f 6666 -b 6677 &
 START "ZMQ_OUT_PROXY" /MIN %PATH_TO_MONICA_BIN_DIR%\monica-zmq-proxy -pps -f 7788 -b 7777 &
