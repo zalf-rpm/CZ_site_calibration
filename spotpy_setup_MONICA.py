@@ -13,18 +13,18 @@ import zmq
 
 import monica_io3
 # from soil_io3 import sand_and_clay_to_ka5_texture, sand_and_clay_to_lambda
-import cz_soil_io3
+import cz_soil_io3 #this needs to change
 
 # 500 m resolution data
-DATA_SOIL_DB = "cz/cz_soil_500.sqlite"
-SOIL_DB_URL = "https://github.com/zalf-rpm/monica-cz/raw/refs/heads/main/data/cz/cz_soil_500.sqlite"
-DATA_GRID_HEIGHT = "cz/cz_dem_500_32633_etrs89-utm33n.asc"
-DATA_GRID_SLOPE = "cz/cz_slope_500_32633_etrs89-utm33n.asc"
-DATA_GRID_SOIL = "cz/cz_soil_500_32633_etrs89-utm33n.asc"
+# DATA_SOIL_DB = "cz/cz_soil_500.sqlite"
+# SOIL_DB_URL = "https://github.com/zalf-rpm/monica-cz/raw/refs/heads/main/data/cz/cz_soil_500.sqlite"
+# DATA_GRID_HEIGHT = "cz/cz_dem_500_32633_etrs89-utm33n.asc"
+# DATA_GRID_SLOPE = "cz/cz_slope_500_32633_etrs89-utm33n.asc"
+# DATA_GRID_SOIL = "cz/cz_soil_500_32633_etrs89-utm33n.asc"
 # DATA_GRID_CROPS = "cz/cz_crop-cw_500_32633_etrs89-utm33n.asc"  # crop map for common wheat
 
-TEMPLATE_PATH_LATLON = "data/cz_latlon-to-rowcol.json"
-TEMPLATE_PATH_CLIMATE_CSV = "{gcm}/{rcm}/{scenario}/{ensmem}/{version}/row-{crow}/col-{ccol}.csv.gz"
+# TEMPLATE_PATH_LATLON = "data/cz_latlon-to-rowcol.json"
+# TEMPLATE_PATH_CLIMATE_CSV = "{gcm}/{rcm}/{scenario}/{ensmem}/{version}/row-{crow}/col-{ccol}.csv.gz"
 
 class SpotSetup(object):
     """
@@ -99,7 +99,7 @@ class SpotSetup(object):
                     if self.config.get(param):
                         value = row[column] if pd.notna(row[column]) else np.nan
 
-                        if param in ["Stem_elongation","Maturity"]: #both, the simulations and the measurements need to be in doy#
+                        if param in ["Heading","Maturity"]: 
                             if pd.notna(value):
                                 value = datetime.strptime(value, '%d.%m.%Y').timetuple().tm_yday
                             else:
@@ -161,8 +161,6 @@ class SpotSetup(object):
                     DaylengthRequirement[int(name.split('_')[1]) - 1] = vector[i]
                 if name.startswith("VernalisationRequirement_"):
                     VernalisationRequirement[int(name.split('_')[1]) - 1] = vector[i]
-                # if name.startswith("SpecificLeafArea_"):
-                #     SpecificLeafArea[int(name.split('_')[1]) - 1] = vector[i]
                 if name.startswith("StageKcFactor_"):
                     StageKcFactor[int(name.split('_')[1]) - 1] = vector[i]
 
@@ -313,7 +311,6 @@ class SpotSetup(object):
             fert_min_template = crop_json.pop("fert_min_template")
 
             # Read soil data and fill missing values
-            # Change to SoilGrids
             soil_profiles = self._read_soil_data_and_fill_missing_values(f"{self.PATH_TO_DATA_DIR}/Soil.csv")
 
             exp_no_to_fertilizers = defaultdict(dict)
@@ -376,7 +373,6 @@ class SpotSetup(object):
             env_template["params"]["siteParameters"]["Latitude"] = float(meta['Lat'])
 
             # complete crop rotation
-            # Add a 25 cm tillage event one week before sowing
             dates = set()
             dates.update(exp_no_to_fertilizers[exp_id].keys())
 
@@ -387,7 +383,7 @@ class SpotSetup(object):
             worksteps_copy[-1]["date"] = harvest_date.strftime('%Y-%m-%d')
 
 
-            start_date = sowing_date - relativedelta(months=6)
+            start_date = sowing_date - relativedelta(months=2)
             env_template["csvViaHeaderOptions"]["start-date"] = start_date.strftime('%Y-%m-%d')
 
             for date in sorted(dates):
@@ -415,7 +411,7 @@ class SpotSetup(object):
         return self.env_templates
 
 
-    def _read_soil_data_and_fill_missing_values(self, soil_file: str): #this needs to change and use Soilgrids#
+    def _read_soil_data_and_fill_missing_values(self, soil_file: str):
         """
 
         :param soil_file:
