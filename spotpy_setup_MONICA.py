@@ -12,7 +12,7 @@ import pandas as pd
 import zmq
 
 import monica_io3
-# from soil_io3 import sand_and_clay_to_ka5_texture, sand_and_clay_to_lambda
+from soil_io3 import sand_and_clay_to_ka5_texture, sand_and_clay_to_lambda
 import cz_soil_io3 #this needs to change
 
 # 500 m resolution data
@@ -33,7 +33,7 @@ class SpotSetup(object):
 
     PATH_TO_DATA_DIR = Path("./data")
 
-    # MONICA_PATH_TO_CLIMATE_DIR  = "C:/Users/palka/GitHub/CZ_site_calibration/data"
+    MONICA_PATH_TO_CLIMATE_DIR  = "C:/Users/palka/GitHub/CZ_site_calibration/data"
     # MONICA_PATH_TO_CLIMATE_DIR  = "C:/Users/escueta/PycharmProjects/irrigation_multiexp/data"
 
     def __init__(self, user_params: pd.DataFrame, exp_maps: pd.DataFrame, obslist: pd.DataFrame):
