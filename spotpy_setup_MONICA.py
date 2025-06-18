@@ -80,10 +80,12 @@ class SpotSetup(object):
 
         # Configuration to select which observations to use
         self.config = {
-            "Yield": True,
-            "Height": True,
-            "Heading": False,
-            "Maturity": False,
+            "Yield": True, #7000 kg ha-1 vs. 12000
+            
+            "Height": False, #97 cm vs. 25
+            
+            "Heading": False, #150 doy, 153
+            "Maturity": False, #208 doy, 211
         }
 
         params_to_columns = {
@@ -139,18 +141,18 @@ class SpotSetup(object):
             # create a copy of the environment template
             current_env = env.copy()
 
-            #Values used for pheno calibration, turn off in not used#
+            # Values used for pheno calibration, turn off in not used#
             # StageTemperatureSum = {}
             # BaseDaylength = {}
             # DaylengthRequirement = {}
             # VernalisationRequirement = {} # only for winter crops#
 
-            #Values used for pheno calibration, turn off in not used# 
+            # Values used for bio calibration, turn off in not used# 
             SpecificLeafArea = vector["SpecificLeafArea"] 
-            StageKcFactor = {}
-            CropSpecificMaxRootingDepth = vector["CropSpecificMaxRootingDepth"]
-            RootPenetrationRate = vector["RootPenetrationRate"]
-            MaxAssimilationRate = vector["MaxAssimilationRate"]
+            # StageKcFactor = {}
+            # CropSpecificMaxRootingDepth = vector["CropSpecificMaxRootingDepth"]
+            # RootPenetrationRate = vector["RootPenetrationRate"]
+            # MaxAssimilationRate = vector["MaxAssimilationRate"]
             
             for i, name in enumerate(vector.name): 
                 if name.startswith("StageTemperatureSum_"):
@@ -183,11 +185,11 @@ class SpotSetup(object):
                 current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][3] *= SpecificLeafArea
                 current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][4] *= SpecificLeafArea
                 current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][5] *= SpecificLeafArea          
-            for key, value in StageKcFactor.items():
-                current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["StageKcFactor"][0][key] = value
-            current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["CropSpecificMaxRootingDepth"] = CropSpecificMaxRootingDepth
-            current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["species"]["RootPenetrationRate"] = RootPenetrationRate
-            current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["MaxAssimilationRate"] = MaxAssimilationRate
+            # for key, value in StageKcFactor.items():
+            #     current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["StageKcFactor"][0][key] = value
+            # current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["CropSpecificMaxRootingDepth"] = CropSpecificMaxRootingDepth
+            # current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["species"]["RootPenetrationRate"] = RootPenetrationRate
+            # current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["MaxAssimilationRate"] = MaxAssimilationRate
 
             sim_envs.append(current_env)
 
@@ -420,7 +422,8 @@ class SpotSetup(object):
         # Read soil data and fill missing values
         #Change to SoilGrids
         soil_df = pd.read_csv(soil_file, sep=';')
-        soil_df[['Clay', 'Sand', 'Silt', 'pH', 'Corg']] = (soil_df[['Clay', 'Sand', 'Silt', 'pH', 'Corg']].ffill())
+        soil_df[['layer_depth','bulk_density','soil_organic_carbon','ph','sand','clay','silt','permanent_wilting_point','field_capacity','saturation']] =
+            (soil_df[['layer_depth','bulk_density','soil_organic_carbon','ph','sand','clay','silt','permanent_wilting_point','field_capacity','saturation']].ffill())
 
         soil_profiles = defaultdict(list)
         prev_depth_m = 0
@@ -434,7 +437,7 @@ class SpotSetup(object):
                 prev_soil_name = soil_name
                 prev_depth_m = 0
 
-            current_depth_m = float(row['Depth']) / 100.0
+            current_depth_m = float(row['layer_depth'])
             thickness = round(current_depth_m - prev_depth_m, 1)
             prev_depth_m = current_depth_m
             # cumulative_depth += thickness
@@ -451,15 +454,16 @@ class SpotSetup(object):
 
             layer = {
                 "Thickness": [thickness, "m"],
-                "SoilRawDensity": [float(row['Raw_density']) * 1000.0, "kg/m3"] if pd.notnull(row['Raw_density']) else
-                print("Raw_density is missing for soil: ", soil_name),
-                "SoilOrganicCarbon": [float(row['Corg']), "%"] if pd.notnull(row['Corg']) else print(
-                    "Corg is missing for "
-                    "soil: ", soil_name),
-                "Clay": [float(row['Clay']), "m3/m3"],
-                "Sand": [float(row['Sand']), "m3/m3"],
-                "Silt": [float(row['Silt']), "m3/m3"],
+                "SoilBulkDensity": [float(row['bulk_density']), "kg/m3"],
+                "SoilOrganicCarbon": [float(row['soil_organic_carbon']), "%"],
+                # "Sand":[float(row['sand']), "m3/m3"],
+                # "Clay":[float(row['clay']), "m3/m3"],
+                # "Silt":[float(row['silt']), "m3/m3"],
+                "PermanentWiltingPoint": [float(row['permanent_wilting_point']), "m3/m3"],
+                "FieldCapacity": [float(row['field_capacity']), "m3/m3"],
+                "PoreVolume": [float(row['saturation']), "m3/m3"]
             }
+
             soil_profiles[soil_name].append(layer)
         return soil_profiles
 
