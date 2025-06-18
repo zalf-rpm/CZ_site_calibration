@@ -75,11 +75,6 @@
 					"date": "2001-11-07"
 				},
 				{
-					"type": "Sowing",
-					"crop": ["ref", "crops", "WW"],
-					"date": "2001-11-07"
-				},
-				{
 					"type": "Harvest",
 					"date": "2002-07-31"
 				}
