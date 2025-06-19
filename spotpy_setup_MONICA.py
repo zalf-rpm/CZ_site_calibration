@@ -142,13 +142,13 @@ class SpotSetup(object):
             current_env = env.copy()
 
             # Values used for pheno calibration, turn off in not used#
-            # StageTemperatureSum = {}
-            # BaseDaylength = {}
-            # DaylengthRequirement = {}
-            # VernalisationRequirement = {} # only for winter crops#
+            StageTemperatureSum = {}
+            BaseDaylength = {}
+            DaylengthRequirement = {}
+            VernalisationRequirement = {} # only for winter crops#
 
             # Values used for bio calibration, turn off in not used# 
-            SpecificLeafArea = vector["SpecificLeafArea"] 
+            # SpecificLeafArea = vector["SpecificLeafArea"] 
             # StageKcFactor = {}
             # CropSpecificMaxRootingDepth = vector["CropSpecificMaxRootingDepth"]
             # RootPenetrationRate = vector["RootPenetrationRate"]
@@ -168,23 +168,23 @@ class SpotSetup(object):
 
             # exchange the values in the environment template
             # Parameters for pheno calibration, turn off if not needed#
-            # for key, value in StageTemperatureSum.items():
-            #     current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["StageTemperatureSum"][0][key] = value
-            # for key, value in BaseDaylength.items():
-            #     current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["BaseDaylength"][0][key] = value
-            # for key, value in DaylengthRequirement.items():
-            #     current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["DaylengthRequirement"][0][key] = value
-            # for key, value in VernalisationRequirement.items():
-            #     current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["VernalisationRequirement"][key] = value
+            for key, value in StageTemperatureSum.items():
+                current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["StageTemperatureSum"][0][key] = value
+            for key, value in BaseDaylength.items():
+                current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["BaseDaylength"][0][key] = value
+            for key, value in DaylengthRequirement.items():
+                current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["DaylengthRequirement"][0][key] = value
+            for key, value in VernalisationRequirement.items():
+                current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["VernalisationRequirement"][key] = value
 
             # Parameters for bio calibration, turn off if not needed#
-            if name.startswith("SpecificLeafArea_"):
-                current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][0] *= SpecificLeafArea
-                current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][1] *= SpecificLeafArea
-                current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][2] *= SpecificLeafArea
-                current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][3] *= SpecificLeafArea
-                current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][4] *= SpecificLeafArea
-                current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][5] *= SpecificLeafArea          
+            # if name.startswith("SpecificLeafArea_"):
+            #     current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][0] *= SpecificLeafArea
+            #     current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][1] *= SpecificLeafArea
+            #     current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][2] *= SpecificLeafArea
+            #     current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][3] *= SpecificLeafArea
+            #     current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][4] *= SpecificLeafArea
+            #     current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][5] *= SpecificLeafArea          
             # for key, value in StageKcFactor.items():
             #     current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["StageKcFactor"][0][key] = value
             # current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["CropSpecificMaxRootingDepth"] = CropSpecificMaxRootingDepth
@@ -422,8 +422,7 @@ class SpotSetup(object):
         # Read soil data and fill missing values
         #Change to SoilGrids
         soil_df = pd.read_csv(soil_file, sep=';')
-        soil_df[['layer_depth','bulk_density','soil_organic_carbon','ph','sand','clay','silt','permanent_wilting_point','field_capacity','saturation']] =
-            (soil_df[['layer_depth','bulk_density','soil_organic_carbon','ph','sand','clay','silt','permanent_wilting_point','field_capacity','saturation']].ffill())
+        soil_df[['layer_depth','bulk_density','soil_organic_carbon','ph','sand','clay','silt','permanent_wilting_point','field_capacity','saturation']] = (soil_df[['layer_depth','bulk_density','soil_organic_carbon','ph','sand','clay','silt','permanent_wilting_point','field_capacity','saturation']].ffill())
 
         soil_profiles = defaultdict(list)
         prev_depth_m = 0
