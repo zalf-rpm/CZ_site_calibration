@@ -34,7 +34,7 @@ class SpotSetup(object):
     PATH_TO_DATA_DIR = Path("./data")
 
     MONICA_PATH_TO_CLIMATE_DIR  = "C:/Users/palka/GitHub/CZ_site_calibration/data"
-    # MONICA_PATH_TO_CLIMATE_DIR  = "C:/Users/escueta/PycharmProjects/irrigation_multiexp/data"
+    # MONICA_PATH_TO_CLIMATE_DIR  = r"C:\Users\escueta\PycharmProjects\CZ_site_calibration\data"
 
     def __init__(self, user_params: pd.DataFrame, exp_maps: pd.DataFrame, obslist: pd.DataFrame):
         """
@@ -163,19 +163,27 @@ class SpotSetup(object):
                     DaylengthRequirement[int(name.split('_')[1]) - 1] = vector[i]
                 if name.startswith("VernalisationRequirement_"):
                     VernalisationRequirement[int(name.split('_')[1]) - 1] = vector[i]
-                if name.startswith("StageKcFactor_"):
-                    StageKcFactor[int(name.split('_')[1]) - 1] = vector[i]
+                # if name.startswith("StageKcFactor_"):
+                #     StageKcFactor[int(name.split('_')[1]) - 1] = vector[i]
+
+            sowing_step = next(
+                (ws for ws in current_env["cropRotation"][0]["worksteps"] if "crop" in ws),
+                None
+            )
+
+            if sowing_step is None:
+                raise ValueError("No sowing workstep with 'crop' found in environment")
 
             # exchange the values in the environment template
             # Parameters for pheno calibration, turn off if not needed#
             for key, value in StageTemperatureSum.items():
-                current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["StageTemperatureSum"][0][key] = value
+                sowing_step["crop"]["cropParams"]["cultivar"]["StageTemperatureSum"][0][key] = value
             for key, value in BaseDaylength.items():
-                current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["BaseDaylength"][0][key] = value
+                sowing_step["crop"]["cropParams"]["cultivar"]["BaseDaylength"][0][key] = value
             for key, value in DaylengthRequirement.items():
-                current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["DaylengthRequirement"][0][key] = value
+                sowing_step["crop"]["cropParams"]["cultivar"]["DaylengthRequirement"][0][key] = value
             for key, value in VernalisationRequirement.items():
-                current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["VernalisationRequirement"][key] = value
+                sowing_step["crop"]["cropParams"]["cultivar"]["VernalisationRequirement"][key] = value
 
             # Parameters for bio calibration, turn off if not needed#
             # if name.startswith("SpecificLeafArea_"):
@@ -389,8 +397,14 @@ class SpotSetup(object):
             env_template["csvViaHeaderOptions"]["start-date"] = start_date.strftime('%Y-%m-%d')
 
             for date in sorted(dates):
-                if date in exp_no_to_fertilizers[exp_id]:
-                    worksteps_copy.insert(-1, copy.deepcopy(exp_no_to_fertilizers[exp_id][date]))
+                fert_event = exp_no_to_fertilizers[exp_id].get(date)
+                if fert_event:
+                    fert_date = datetime.strptime(fert_event["date"], '%Y-%m-%d')
+                    if fert_date < sowing_date:
+                        worksteps_copy.insert(0, copy.deepcopy(fert_event))
+                    else:
+                        worksteps_copy.insert(-1, copy.deepcopy(fert_event))
+
                 # if date in exp_no_to_irrigation[exp_id]:
                 #     worksteps_copy.insert(-1, copy.deepcopy(exp_no_to_irrigation[exp_id][date]))
                 # if date in exp_no_to_management[exp_id]:
@@ -455,9 +469,9 @@ class SpotSetup(object):
                 "Thickness": [thickness, "m"],
                 "SoilBulkDensity": [float(row['bulk_density']), "kg/m3"],
                 "SoilOrganicCarbon": [float(row['soil_organic_carbon']), "%"],
-                # "Sand":[float(row['sand']), "m3/m3"],
-                # "Clay":[float(row['clay']), "m3/m3"],
-                # "Silt":[float(row['silt']), "m3/m3"],
+                "Sand":[float(row['sand']), "m3/m3"],
+                "Clay":[float(row['clay']), "m3/m3"],
+                "Silt":[float(row['silt']), "m3/m3"],
                 "PermanentWiltingPoint": [float(row['permanent_wilting_point']), "m3/m3"],
                 "FieldCapacity": [float(row['field_capacity']), "m3/m3"],
                 "PoreVolume": [float(row['saturation']), "m3/m3"]
