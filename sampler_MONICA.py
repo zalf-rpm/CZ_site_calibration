@@ -55,7 +55,7 @@ crop_site_map_df = pd.read_csv(os.path.join(basepath, crop_sim_site_MAP), delimi
 
 # read observations for which the likelihood of parameter space is calculated
 # Read the observations from the measurements file.
-measurements_df = pd.read_csv("Measurements.csv", delimiter=";", skiprows=[1, 2])
+measurements_df = pd.read_csv("Measurements.csv", delimiter=";")
 
 # Here, MONICA is initialized and a producer is started:
 # Arguments are: Parameters, Sites, Observations
