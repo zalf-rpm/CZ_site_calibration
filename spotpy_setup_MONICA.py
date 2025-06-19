@@ -187,17 +187,17 @@ class SpotSetup(object):
 
             # Parameters for bio calibration, turn off if not needed#
             # if name.startswith("SpecificLeafArea_"):
-            #     current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][0] *= SpecificLeafArea
-            #     current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][1] *= SpecificLeafArea
-            #     current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][2] *= SpecificLeafArea
-            #     current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][3] *= SpecificLeafArea
-            #     current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][4] *= SpecificLeafArea
-            #     current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][5] *= SpecificLeafArea          
+            #     sowing_step["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][0] *= SpecificLeafArea
+            #     sowing_step["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][1] *= SpecificLeafArea
+            #     sowing_step["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][2] *= SpecificLeafArea
+            #     sowing_step["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][3] *= SpecificLeafArea
+            #     sowing_step["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][4] *= SpecificLeafArea
+            #     sowing_step["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][5] *= SpecificLeafArea          
             # for key, value in StageKcFactor.items():
-            #     current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["StageKcFactor"][0][key] = value
-            # current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["CropSpecificMaxRootingDepth"] = CropSpecificMaxRootingDepth
-            # current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["species"]["RootPenetrationRate"] = RootPenetrationRate
-            # current_env["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["cultivar"]["MaxAssimilationRate"] = MaxAssimilationRate
+            #     sowing_step["crop"]["cropParams"]["cultivar"]["StageKcFactor"][0][key] = value
+            # sowing_step["crop"]["cropParams"]["cultivar"]["CropSpecificMaxRootingDepth"] = CropSpecificMaxRootingDepth
+            # sowing_step["crop"]["cropParams"]["species"]["RootPenetrationRate"] = RootPenetrationRate
+            # sowing_step["crop"]["cropParams"]["cultivar"]["MaxAssimilationRate"] = MaxAssimilationRate
 
             sim_envs.append(current_env)
 
