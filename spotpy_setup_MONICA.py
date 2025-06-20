@@ -80,12 +80,12 @@ class SpotSetup(object):
 
         # Configuration to select which observations to use
         self.config = {
-            "Yield": True,
+            "Yield": False,
             
             "Height": False,
             
-            "Heading": False,
-            "Maturity": False,
+            "Heading": True,
+            "Maturity": True,
         }
 
         params_to_columns = {

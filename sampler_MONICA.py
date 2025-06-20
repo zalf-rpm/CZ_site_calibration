@@ -14,11 +14,13 @@ import numpy as np
 crop_sim_site_MAP = "crop_sim_site_MAP_WW.csv"
 calib_params_df = pd.read_csv("calibratethese_ww_pheno.csv", delimiter=";")
 # calib_params_df = pd.read_csv("calibratethese_ww_bio.csv", delimiter=";")
+
+# Examples for splitting "calibratethese" files
 # calib_params_df = pd.read_csv("calibratethese_ww_bio_StageKc.csv", delimiter=";")
 # calib_params_df = pd.read_csv("calibratethese_ww_bio_SpecificLeaf.csv", delimiter=";")
 
 
-rep = 2
+rep = 500
 
 
 def add_identity(axes, *line_args, **line_kwargs):
