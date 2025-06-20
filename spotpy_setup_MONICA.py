@@ -80,12 +80,12 @@ class SpotSetup(object):
 
         # Configuration to select which observations to use
         self.config = {
-            "Yield": True, #7000 kg ha-1 vs. 12000
+            "Yield": True,
             
-            "Height": False, #97 cm vs. 25
+            "Height": False,
             
-            "Heading": False, #150 doy, 153
-            "Maturity": False, #208 doy, 211
+            "Heading": False,
+            "Maturity": False,
         }
 
         params_to_columns = {
@@ -101,11 +101,11 @@ class SpotSetup(object):
                     if self.config.get(param):
                         value = row[column] if pd.notna(row[column]) else np.nan
 
-                        if param in ["Heading","Maturity"]: 
-                            if pd.notna(value):
-                                value = datetime.strptime(value, '%d.%m.%Y').timetuple().tm_yday
-                            else:
-                                value = np.nan
+                        # if param in ["Heading","Maturity"]: 
+                        #     if pd.notna(value):
+                        #         value = datetime.strptime(value, '%d.%m.%Y').timetuple().tm_yday
+                        #     else:
+                        #         value = np.nan
 
                         self.observations.append((row['Experiment'], value))
 
@@ -163,8 +163,8 @@ class SpotSetup(object):
                     DaylengthRequirement[int(name.split('_')[1]) - 1] = vector[i]
                 if name.startswith("VernalisationRequirement_"):
                     VernalisationRequirement[int(name.split('_')[1]) - 1] = vector[i]
-                # if name.startswith("StageKcFactor_"):
-                #     StageKcFactor[int(name.split('_')[1]) - 1] = vector[i]
+                if name.startswith("StageKcFactor_"):
+                    StageKcFactor[int(name.split('_')[1]) - 1] = vector[i]
 
             sowing_step = next(
                 (ws for ws in current_env["cropRotation"][0]["worksteps"] if "crop" in ws),
@@ -244,8 +244,8 @@ class SpotSetup(object):
         param_extraction_config = {
             "Yield": lambda rec_msg: rec_msg["data"][2]['results'][0].get('Yield', np.nan),
             "Height": lambda rec_msg: rec_msg["data"][2]['results'][0].get('Height', np.nan),
-            "Heading": lambda rec_msg: self._extract_date(rec_msg, 0),
-            "Maturity": lambda rec_msg: self._extract_date(rec_msg, 1),
+            "Heading": lambda rec_msg: rec_msg["data"][0]['results'][0].get('DOY', np.nan),
+            "Maturity": lambda rec_msg: rec_msg["data"][1]['results'][0].get('DOY', np.nan),
         }
 
         while not leave:
