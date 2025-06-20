@@ -50,10 +50,10 @@
 		],
 		"calibration_events": [
 			{"at": ["Stage", "=", 3]}, [
-				"Date"
+				"DOY"
 			],
 			"maturity", [
-				"Date"
+				"DOY"
 			],
 			{"at": "Harvest"}, [
 				"Yield",
