@@ -80,12 +80,12 @@ class SpotSetup(object):
 
         # Configuration to select which observations to use
         self.config = {
-            "Yield": False,
+            "Yield": True,
             
             "Height": False,
             
-            "Heading": True,
-            "Maturity": True,
+            "Heading": False,
+            "Maturity": False,
         }
 
         params_to_columns = {
@@ -142,13 +142,13 @@ class SpotSetup(object):
             current_env = env.copy()
 
             # Values used for pheno calibration, turn off in not used#
-            StageTemperatureSum = {}
-            BaseDaylength = {}
-            DaylengthRequirement = {}
-            VernalisationRequirement = {} # only for winter crops#
+            # StageTemperatureSum = {}
+            # BaseDaylength = {}
+            # DaylengthRequirement = {}
+            # VernalisationRequirement = {} # only for winter crops#
 
             # Values used for bio calibration, turn off in not used# 
-            # SpecificLeafArea = vector["SpecificLeafArea"] 
+            SpecificLeafArea = vector["SpecificLeafArea"] 
             # StageKcFactor = {}
             # CropSpecificMaxRootingDepth = vector["CropSpecificMaxRootingDepth"]
             # RootPenetrationRate = vector["RootPenetrationRate"]
@@ -176,14 +176,14 @@ class SpotSetup(object):
 
             # exchange the values in the environment template
             # Parameters for pheno calibration, turn off if not needed#
-            for key, value in StageTemperatureSum.items():
-                sowing_step["crop"]["cropParams"]["cultivar"]["StageTemperatureSum"][0][key] = value
-            for key, value in BaseDaylength.items():
-                sowing_step["crop"]["cropParams"]["cultivar"]["BaseDaylength"][0][key] = value
-            for key, value in DaylengthRequirement.items():
-                sowing_step["crop"]["cropParams"]["cultivar"]["DaylengthRequirement"][0][key] = value
-            for key, value in VernalisationRequirement.items():
-                sowing_step["crop"]["cropParams"]["cultivar"]["VernalisationRequirement"][key] = value
+            # for key, value in StageTemperatureSum.items():
+            #     sowing_step["crop"]["cropParams"]["cultivar"]["StageTemperatureSum"][0][key] = value
+            # for key, value in BaseDaylength.items():
+            #     sowing_step["crop"]["cropParams"]["cultivar"]["BaseDaylength"][0][key] = value
+            # for key, value in DaylengthRequirement.items():
+            #     sowing_step["crop"]["cropParams"]["cultivar"]["DaylengthRequirement"][0][key] = value
+            # for key, value in VernalisationRequirement.items():
+            #     sowing_step["crop"]["cropParams"]["cultivar"]["VernalisationRequirement"][key] = value
 
             # Parameters for bio calibration, turn off if not needed#
             # if name.startswith("SpecificLeafArea_"):
@@ -193,6 +193,12 @@ class SpotSetup(object):
             #     sowing_step["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][3] *= SpecificLeafArea
             #     sowing_step["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][4] *= SpecificLeafArea
             #     sowing_step["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][5] *= SpecificLeafArea          
+            sowing_step["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][0] *= SpecificLeafArea
+            sowing_step["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][1] *= SpecificLeafArea
+            sowing_step["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][2] *= SpecificLeafArea
+            sowing_step["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][3] *= SpecificLeafArea
+            sowing_step["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][4] *= SpecificLeafArea
+            sowing_step["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][5] *= SpecificLeafArea       
             # for key, value in StageKcFactor.items():
             #     sowing_step["crop"]["cropParams"]["cultivar"]["StageKcFactor"][0][key] = value
             # sowing_step["crop"]["cropParams"]["cultivar"]["CropSpecificMaxRootingDepth"] = CropSpecificMaxRootingDepth
