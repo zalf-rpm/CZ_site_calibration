@@ -31,9 +31,10 @@ class SpotSetup(object):
     This class is a setup for spotpy to calibrate MONICA model.
     """
 
+## Pfade ändern ##
     PATH_TO_DATA_DIR = Path("./data")
 
-    MONICA_PATH_TO_CLIMATE_DIR  = "C:/Users/palka/GitHub/CZ_site_calibration/data"
+    MONICA_PATH_TO_CLIMATE_DIR  = "C:/Users/palka/GitHub/CZ_site_calibration/data" ## Pfad anpassen ##
     # MONICA_PATH_TO_CLIMATE_DIR  = r"C:\Users\escueta\PycharmProjects\CZ_site_calibration\data"
 
     def __init__(self, user_params: pd.DataFrame, exp_maps: pd.DataFrame, obslist: pd.DataFrame):
@@ -78,7 +79,7 @@ class SpotSetup(object):
         self.observations = [] # for spotpy
         list_of_experiments = self.experiments['exp_ID'].values.tolist()
 
-        # Configuration to select which observations to use
+        # Configuration to select which observations to use ## Verfügbare Beobachtungen ##
         self.config = {
             "Yield": True,
             
@@ -141,30 +142,22 @@ class SpotSetup(object):
             # create a copy of the environment template
             current_env = env.copy()
 
-            # Values used for pheno calibration, turn off in not used#
+            # Values turn off in not used# ## An- und Abschalten ##
             # StageTemperatureSum = {}
-            # BaseDaylength = {}
-            # DaylengthRequirement = {}
-            # VernalisationRequirement = {} # only for winter crops#
-
-            # Values used for bio calibration, turn off in not used# 
-            SpecificLeafArea = vector["SpecificLeafArea"] 
             # StageKcFactor = {}
             # CropSpecificMaxRootingDepth = vector["CropSpecificMaxRootingDepth"]
             # RootPenetrationRate = vector["RootPenetrationRate"]
+            # SpecificRootLength = vector["SpecificRootLength"]
+            # DroughtStressThreshold = {}
             # MaxAssimilationRate = vector["MaxAssimilationRate"]
             
             for i, name in enumerate(vector.name): 
                 if name.startswith("StageTemperatureSum_"):
                     StageTemperatureSum[int(name.split('_')[1]) - 1] = vector[i]
-                if name.startswith("BaseDaylength_"):
-                    BaseDaylength[int(name.split('_')[1]) - 1] = vector[i]
-                if name.startswith("DaylengthRequirement_"):
-                    DaylengthRequirement[int(name.split('_')[1]) - 1] = vector[i]
-                if name.startswith("VernalisationRequirement_"):
-                    VernalisationRequirement[int(name.split('_')[1]) - 1] = vector[i]
                 if name.startswith("StageKcFactor_"):
                     StageKcFactor[int(name.split('_')[1]) - 1] = vector[i]
+                if name.startswith("DroughtStressThreshold_"):
+                    DroughtStressThreshold[int(name.split('_')[1]) - 1] = vector[i]
 
             sowing_step = next(
                 (ws for ws in current_env["cropRotation"][0]["worksteps"] if "crop" in ws),
@@ -174,35 +167,16 @@ class SpotSetup(object):
             if sowing_step is None:
                 raise ValueError("No sowing workstep with 'crop' found in environment")
 
-            # exchange the values in the environment template
-            # Parameters for pheno calibration, turn off if not needed#
+            # Values turn off in not used# ## An- und Abschalten ##
             # for key, value in StageTemperatureSum.items():
             #     sowing_step["crop"]["cropParams"]["cultivar"]["StageTemperatureSum"][0][key] = value
-            # for key, value in BaseDaylength.items():
-            #     sowing_step["crop"]["cropParams"]["cultivar"]["BaseDaylength"][0][key] = value
-            # for key, value in DaylengthRequirement.items():
-            #     sowing_step["crop"]["cropParams"]["cultivar"]["DaylengthRequirement"][0][key] = value
-            # for key, value in VernalisationRequirement.items():
-            #     sowing_step["crop"]["cropParams"]["cultivar"]["VernalisationRequirement"][key] = value
-
-            # Parameters for bio calibration, turn off if not needed#
-            # if name.startswith("SpecificLeafArea_"):
-            #     sowing_step["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][0] *= SpecificLeafArea
-            #     sowing_step["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][1] *= SpecificLeafArea
-            #     sowing_step["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][2] *= SpecificLeafArea
-            #     sowing_step["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][3] *= SpecificLeafArea
-            #     sowing_step["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][4] *= SpecificLeafArea
-            #     sowing_step["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][5] *= SpecificLeafArea          
-            sowing_step["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][0] *= SpecificLeafArea
-            sowing_step["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][1] *= SpecificLeafArea
-            sowing_step["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][2] *= SpecificLeafArea
-            sowing_step["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][3] *= SpecificLeafArea
-            sowing_step["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][4] *= SpecificLeafArea
-            sowing_step["crop"]["cropParams"]["cultivar"]["SpecificLeafArea"][5] *= SpecificLeafArea       
             # for key, value in StageKcFactor.items():
             #     sowing_step["crop"]["cropParams"]["cultivar"]["StageKcFactor"][0][key] = value
             # sowing_step["crop"]["cropParams"]["cultivar"]["CropSpecificMaxRootingDepth"] = CropSpecificMaxRootingDepth
             # sowing_step["crop"]["cropParams"]["species"]["RootPenetrationRate"] = RootPenetrationRate
+            # sowing_step["crop"]["cropParams"]["species"]["SpecificRootLength"] = SpecificRootLength
+            # for key, value in DroughtStressThreshold.items():
+            #     sowing_step["crop"]["cropParams"]["cultivar"]["DroughtStressThreshold"][0][key] = value
             # sowing_step["crop"]["cropParams"]["cultivar"]["MaxAssimilationRate"] = MaxAssimilationRate
 
             sim_envs.append(current_env)
@@ -304,9 +278,11 @@ class SpotSetup(object):
         # Read metadata and management data
         metadata_df = pd.read_csv(f"{self.PATH_TO_DATA_DIR}/Meta.csv", sep=';')
         fert_min_df = pd.read_csv(f"{self.PATH_TO_DATA_DIR}/Fertilisation_min.csv", sep=';')
+        irrig_df = pd.read_csv(f"{self.PATH_TO_DATA_DIR}/Irrigation.csv", sep=';')
 
         # Merge datasets
         merged_df_fert_min = pd.merge(metadata_df, fert_min_df, on='Fertilisation_min')
+        merged_df_irrig = pd.merge(metadata_df, irrig_df, on='Irrigation')
 
         # transform the meta dataframe to a dictionary with experiment number as key
         exp_no_to_meta = metadata_df.set_index('Experiment').T.to_dict('dict')
@@ -325,12 +301,13 @@ class SpotSetup(object):
 
             # Extract templates from crop configuration
             fert_min_template = crop_json.pop("fert_min_template")
+            irrig_template = crop_json.pop("irrig_template")
 
             # Read soil data and fill missing values
             soil_profiles = self._read_soil_data_and_fill_missing_values(f"{self.PATH_TO_DATA_DIR}/Soil.csv")
 
             exp_no_to_fertilizers = defaultdict(dict)
-            # exp_no_to_irrigation = defaultdict(dict)
+            exp_no_to_irrigation = defaultdict(dict)
             # exp_no_to_management = defaultdict(dict)
 
             for _, row in merged_df_fert_min.iterrows():
@@ -340,6 +317,14 @@ class SpotSetup(object):
                 fert_min_temp["date"] = datetime.strptime(row['Date'], '%d.%m.%Y').strftime('%Y-%m-%d')
                 fert_min_temp["amount"][0] = float(row['Amount_kg_ha'])
                 exp_no_to_fertilizers[row['Experiment']][fert_min_temp["date"]] = fert_min_temp
+            
+            for _, row in merged_df_irrig.iterrows():
+                if pd.isna(row['Irrigation']) or row['Irrigation'] in ['no_irrig', 'wet', 'dry', 1, 2]:
+                    continue
+                irrig_temp = copy.deepcopy(irrig_template)
+                irrig_temp["date"] = datetime.strptime(row['Date'], '%d.%m.%Y').strftime('%Y-%m-%d')
+                irrig_temp["amount"][0] = float(row['Amount_mm'])
+                exp_no_to_irrigation[row['Experiment']][irrig_temp["date"]] = irrig_temp
 
             # We need one standard soil management#
             # for _, row in merged_df_till.iterrows():
@@ -390,7 +375,7 @@ class SpotSetup(object):
 
             # complete crop rotation
             dates = set()
-            dates.update(exp_no_to_fertilizers[exp_id].keys())
+            dates.update(exp_no_to_fertilizers[exp_id].keys(), exp_no_to_irrigation[exp_id].keys())
 
             worksteps_copy = copy.deepcopy(worksteps)
             sowing_date = datetime.strptime(meta['Sowing'], '%d.%m.%Y')
@@ -399,20 +384,14 @@ class SpotSetup(object):
             worksteps_copy[-1]["date"] = harvest_date.strftime('%Y-%m-%d')
 
 
-            start_date = sowing_date - relativedelta(months=2)
+            start_date = sowing_date - relativedelta(months=2) ## Anpassen falls nötig ##
             env_template["csvViaHeaderOptions"]["start-date"] = start_date.strftime('%Y-%m-%d')
 
             for date in sorted(dates):
-                fert_event = exp_no_to_fertilizers[exp_id].get(date)
-                if fert_event:
-                    fert_date = datetime.strptime(fert_event["date"], '%Y-%m-%d')
-                    if fert_date < sowing_date:
-                        worksteps_copy.insert(0, copy.deepcopy(fert_event))
-                    else:
-                        worksteps_copy.insert(-1, copy.deepcopy(fert_event))
-
-                # if date in exp_no_to_irrigation[exp_id]:
-                #     worksteps_copy.insert(-1, copy.deepcopy(exp_no_to_irrigation[exp_id][date]))
+                if date in exp_no_to_fertilizers[exp_id]:
+                    worksteps_copy.insert(-1, copy.deepcopy(exp_no_to_fertilizers[exp_id][date]))
+                if date in exp_no_to_irrigation[exp_id]:
+                    worksteps_copy.insert(-1, copy.deepcopy(exp_no_to_irrigation[exp_id][date]))
                 # if date in exp_no_to_management[exp_id]:
                 #     tillage_event = copy.deepcopy(exp_no_to_management[exp_id][date])
                 #     tillage_date = datetime.strptime(tillage_event["date"], '%Y-%m-%d')
