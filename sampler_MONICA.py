@@ -11,8 +11,8 @@ import numpy as np
 
 # Define experiments (=crops), parameters to calibrate, and repetitions.
 
-crop_sim_site_MAP = "crop_sim_site_MAP_SM.csv" ## Anpassen ##
-calib_params_df = pd.read_csv("calibratethese_sm.csv", delimiter=";")
+crop_sim_site_MAP = "crop_sim_site_MAP_WW.csv" ## Anpassen ##
+calib_params_df = pd.read_csv("calibratethese_ww_bio.csv", delimiter=";")
 
 
 rep = 5 ## Anpassen ##

@@ -128,6 +128,7 @@ class SpotSetup(object):
         return spotpy.parameter.generate(self.params)
 
     def simulation(self, vector):
+        self.out = {}
         # the vector comes from spotpy, self.user_params holds the information coming from csv file
 
         # launch parallel thread for the collector
@@ -140,11 +141,11 @@ class SpotSetup(object):
         # iterate over all experiments and set the model parameters and send them to MONICA
         for env in self.env_templates:
             # create a copy of the environment template
-            current_env = env.copy()
+            current_env = copy.deepcopy(env)
 
             # Values turn off in not used# ## An- und Abschalten ##
             # StageTemperatureSum = {}
-            # StageKcFactor = {}
+            StageKcFactor = {}
             # CropSpecificMaxRootingDepth = vector["CropSpecificMaxRootingDepth"]
             # RootPenetrationRate = vector["RootPenetrationRate"]
             # SpecificRootLength = vector["SpecificRootLength"]
