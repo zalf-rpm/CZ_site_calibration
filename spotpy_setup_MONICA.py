@@ -171,8 +171,8 @@ class SpotSetup(object):
             # Values turn off in not used# ## An- und Abschalten ##
             # for key, value in StageTemperatureSum.items():
             #     sowing_step["crop"]["cropParams"]["cultivar"]["StageTemperatureSum"][0][key] = value
-            # for key, value in StageKcFactor.items():
-            #     sowing_step["crop"]["cropParams"]["cultivar"]["StageKcFactor"][0][key] = value
+            for key, value in StageKcFactor.items():
+                sowing_step["crop"]["cropParams"]["cultivar"]["StageKcFactor"][0][key] = value
             # sowing_step["crop"]["cropParams"]["cultivar"]["CropSpecificMaxRootingDepth"] = CropSpecificMaxRootingDepth
             # sowing_step["crop"]["cropParams"]["species"]["RootPenetrationRate"] = RootPenetrationRate
             # sowing_step["crop"]["cropParams"]["species"]["SpecificRootLength"] = SpecificRootLength
