@@ -34,7 +34,7 @@ class SpotSetup(object):
 ## Pfade ändern ##
     PATH_TO_DATA_DIR = Path("./data")
 
-    MONICA_PATH_TO_CLIMATE_DIR  = "C:/Users/palka/GitHub/CZ_site_calibration/data" ## Pfad anpassen ##
+    MONICA_PATH_TO_CLIMATE_DIR  = r"C:\Users\palka\GitHub\CZ_site_calibration2\CZ_site_calibration\data" ## Pfad anpassen ##
     # MONICA_PATH_TO_CLIMATE_DIR  = r"C:\Users\escueta\PycharmProjects\CZ_site_calibration\data"
 
     def __init__(self, user_params: pd.DataFrame, exp_maps: pd.DataFrame, obslist: pd.DataFrame):
@@ -144,8 +144,8 @@ class SpotSetup(object):
             current_env = copy.deepcopy(env)
 
             # Values turn off in not used# ## An- und Abschalten ##
-            # StageTemperatureSum = {}
-            StageKcFactor = {}
+            StageTemperatureSum = {}
+            # StageKcFactor = {}
             # CropSpecificMaxRootingDepth = vector["CropSpecificMaxRootingDepth"]
             # RootPenetrationRate = vector["RootPenetrationRate"]
             # SpecificRootLength = vector["SpecificRootLength"]
@@ -169,10 +169,10 @@ class SpotSetup(object):
                 raise ValueError("No sowing workstep with 'crop' found in environment")
 
             # Values turn off in not used# ## An- und Abschalten ##
-            # for key, value in StageTemperatureSum.items():
-            #     sowing_step["crop"]["cropParams"]["cultivar"]["StageTemperatureSum"][0][key] = value
-            for key, value in StageKcFactor.items():
-                sowing_step["crop"]["cropParams"]["cultivar"]["StageKcFactor"][0][key] = value
+            for key, value in StageTemperatureSum.items():
+                sowing_step["crop"]["cropParams"]["cultivar"]["StageTemperatureSum"][0][key] = value
+            # for key, value in StageKcFactor.items():
+            #     sowing_step["crop"]["cropParams"]["cultivar"]["StageKcFactor"][0][key] = value
             # sowing_step["crop"]["cropParams"]["cultivar"]["CropSpecificMaxRootingDepth"] = CropSpecificMaxRootingDepth
             # sowing_step["crop"]["cropParams"]["species"]["RootPenetrationRate"] = RootPenetrationRate
             # sowing_step["crop"]["cropParams"]["species"]["SpecificRootLength"] = SpecificRootLength
@@ -277,9 +277,9 @@ class SpotSetup(object):
         self.env_templates = []
 
         # Read metadata and management data
-        metadata_df = pd.read_csv(f"{self.PATH_TO_DATA_DIR}/Meta.csv", sep=';')
-        fert_min_df = pd.read_csv(f"{self.PATH_TO_DATA_DIR}/Fertilisation_min.csv", sep=';')
-        irrig_df = pd.read_csv(f"{self.PATH_TO_DATA_DIR}/Irrigation.csv", sep=';')
+        metadata_df = pd.read_csv(f"{self.PATH_TO_DATA_DIR}/Meta_SM.csv", sep=';') ## Werte in der csv Datei anpassen ##
+        fert_min_df = pd.read_csv(f"{self.PATH_TO_DATA_DIR}/Fertilisation_min.csv", sep=';') ## Werte in der csv Datei anpassen ##
+        irrig_df = pd.read_csv(f"{self.PATH_TO_DATA_DIR}/Irrigation.csv", sep=';') ## Werte in der csv Datei anpassen ##
 
         # Merge datasets
         merged_df_fert_min = pd.merge(metadata_df, fert_min_df, on='Fertilisation_min')

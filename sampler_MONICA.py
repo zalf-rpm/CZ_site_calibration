@@ -11,8 +11,8 @@ import numpy as np
 
 # Define experiments (=crops), parameters to calibrate, and repetitions.
 
-crop_sim_site_MAP = "crop_sim_site_MAP_WW.csv" ## Anpassen ##
-calib_params_df = pd.read_csv("calibratethese_ww_bio.csv", delimiter=";")
+crop_sim_site_MAP = "crop_sim_site_MAP_SM.csv" ## Werte in der csv Datei anpassen ##
+calib_params_df = pd.read_csv("calibratethese_SM.csv", delimiter=";")
 
 
 rep = 5 ## Anpassen ##
@@ -52,7 +52,7 @@ crop_site_map_df = pd.read_csv(os.path.join(basepath, crop_sim_site_MAP), delimi
 
 # read observations for which the likelihood of parameter space is calculated
 # Read the observations from the measurements file.
-measurements_df = pd.read_csv("Measurements.csv", delimiter=";")
+measurements_df = pd.read_csv("Measurements_SM.csv", delimiter=";") ## Werte in der csv Datei anpassen ##
 
 # Here, MONICA is initialized and a producer is started:
 # Arguments are: Parameters, Sites, Observations
