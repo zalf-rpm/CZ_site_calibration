@@ -1,0 +1,4 @@
+Experiment;Name;Weather;Soil;Year;Sowing;Harvest;Irrigation;Fertilisation_min;Crop;Lat;Long;Elevation
+EX1;BRA;weather1;soil1;2006;09.10.2005;28.07.2006;irrig1;fert1;SM;48.9606006;16.4441042;190
+EX2;BRA;weather1;soil1;2006;09.10.2005;28.07.2006;no_irrig;fert21;SM;48.9606006;16.4441042;190
+EX3;BRA;weather1;soil1;2007;02.10.2006;08.07.2007;no_irrig;fert2;SM;48.9606006;16.4441042;190

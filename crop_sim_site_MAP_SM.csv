@@ -1,0 +1,4 @@
+exp_ID,sim file,crop file,site file,climate file,species params,cv params,position in rotation *,crop ID (as in crop.json),"*separate with ""-"" if the crop has more than one position"
+EX1,sim.json,crop.json,site.json,weather1,maize.json,maize/silage-maize_modoklim_pheno.json,0,SM,
+EX2,sim.json,crop.json,site.json,weather1,maize.json,maize/silage-maize_modoklim_pheno.json,0,SM,
+EX3,sim.json,crop.json,site.json,weather1,maize.json,maize/silage-maize_modoklim_pheno.json,0,SM,
